@@ -1,0 +1,25 @@
+# This is workflow for pr build of dotnet core project running on K8s
+
+name: PR Workflow
+run-name: PR Workflow
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    pull_request_review:
+      types: [submitted]
+
+permissions:
+  id-token: write
+  contents: write
+  pull-requests: write
+
+jobs:
+
+    pr-workflow:
+        uses: ./.github/Workflows/pr-workflow.yml
+        name: PR Workflow
+        with:
+            nuget_virtual_repo_list: "nuget-virtual"
+            test_params: "--no-restore"
+        
