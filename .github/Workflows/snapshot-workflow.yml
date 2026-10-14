@@ -1,0 +1,28 @@
+# This is workflow for snapshot build of dotnet core project running on K8s
+
+name: Snapshot Workflow
+run-name: Snapshot Workflow
+
+on:
+  push:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+
+    snapshot-workflow:
+        uses: ./.github/Workflows/snapshot-workflow.yml
+        name: Snapshot Workflow
+        with:
+            base_image: "utilities-containerimages-chrome:ubi8-dotnet-latest"
+            artifact_pattern: "src/**/bin/Release/net7.0/*.nupkg"
+            release_number: "1.0.0-SNAPSHOT"
+            nuget_virtual_repo_list: "nuget-virtual"
+            cd_github_branch: "main"
+            pipeline_id: "DOE_K8S_Rolling_Deploy"
+            input_set_id: "k8sapplication-dev"
+            notification_email_list: "guptantin27@gmail.com;itsnitingreat@yahoo.co.in;guptanitin27@outlook.com"
+            test_params: "--no-restore"
+            continue_on_unit_test_failure: "true"

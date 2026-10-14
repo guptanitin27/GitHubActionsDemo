@@ -1,0 +1,29 @@
+# This is workflow for release build of dotnet core project running on K8s
+
+name: Release Workflow
+run-name: Release Workflow
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: write
+
+jobs:
+
+    release-workflow:
+        uses: ./.github/Workflows/release-workflow.yml
+        name: Release Workflow
+        with:
+            base_image: "utilities-containerimages-chrome:ubi8-dotnet-latest"
+            artifact_pattern: "src/**/bin/Release/net7.0/*.nupkg"
+            release_number: "1.0.0"
+            nuget_virtual_repo_list: "nuget-virtual"
+            cd_github_branch: "main"
+            pipeline_id: "DOE_K8S_Rolling_Deploy"
+            stage_id: "Dev" #(Optional) If not provided, the default stage will be used
+            input_set_id: "k8sapplication-dev"
+            notification_email_list: "guptantin27@gmail.com;itsnitingreat@yahoo.co.in;guptanitin27@outlook.com"
+            test_params: "--no-restore"
+            refresh_build_cache: "true"
